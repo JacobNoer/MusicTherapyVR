@@ -1,38 +1,39 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MenuButton : MonoBehaviour
+namespace Animations.Scripts
 {
-    [SerializeField] private MenuButtonController menuButtonController;
-    [SerializeField] private Animator animator;
-    [SerializeField] private AnimatorFunctions animatorFunctions;
-    [SerializeField] private int thisIndex;
-
-    // Update is called once per frame
-    private void Update()
+    public class MenuButton : MonoBehaviour
     {
-        if (menuButtonController.index == thisIndex)
-        {
-            animator.SetBool("selected", true);
-            if (Input.GetAxis("Submit") == 1)
-            {
-                animator.SetBool("pressed", true);
+        [SerializeField] private MenuButtonController menuButtonController;
+        [SerializeField] private Animator animator;
+        [SerializeField] private AnimatorFunctions animatorFunctions;
+        [SerializeField] private int thisIndex;
 
-                if (thisIndex == 0)
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-                else if (thisIndex == 1) Application.Quit();
-            }
-            else if (animator.GetBool("pressed"))
-            {
-                animator.SetBool("pressed", false);
-                animatorFunctions.disableOnce = true;
-            }
-        }
-        else
+        // Update is called once per frame
+        private void Update()
         {
-            animator.SetBool("selected", false);
+            if (menuButtonController.index == thisIndex)
+            {
+                animator.SetBool("selected", true);
+                if (Input.GetAxis("Submit") == 1)
+                {
+                    animator.SetBool("pressed", true);
+
+                    if (thisIndex == 0)
+                        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                    else if (thisIndex == 1) Application.Quit();
+                }
+                else if (animator.GetBool("pressed"))
+                {
+                    animator.SetBool("pressed", false);
+                    animatorFunctions.disableOnce = true;
+                }
+            }
+            else
+            {
+                animator.SetBool("selected", false);
+            }
         }
     }
 }

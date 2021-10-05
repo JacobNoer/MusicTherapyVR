@@ -1,48 +1,49 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class MenuButtonController : MonoBehaviour
+namespace Animations.Scripts
 {
-    // Use this for initialization
-    public int index;
-    [SerializeField] private bool keyDown;
-    [SerializeField] private int maxIndex;
-    public AudioSource audioSource;
-
-    private void Start()
+    public class MenuButtonController : MonoBehaviour
     {
-        audioSource = GetComponent<AudioSource>();
-    }
+        // Use this for initialization
+        public int index;
+        [SerializeField] private bool keyDown;
+        [SerializeField] private int maxIndex;
+        public AudioSource audioSource;
 
-    // Update is called once per frame
-    private void Update()
-    {
-        if (Input.GetAxis("Vertical") != 0)
+        private void Start()
         {
-            if (!keyDown)
-            {
-                if (Input.GetAxis("Vertical") < 0)
-                {
-                    if (index < maxIndex)
-                        index++;
-                    else
-                        index = 0;
-                }
-                else if (Input.GetAxis("Vertical") > 0)
-                {
-                    if (index > 0)
-                        index--;
-                    else
-                        index = maxIndex;
-                }
-
-                keyDown = true;
-            }
+            audioSource = GetComponent<AudioSource>();
         }
-        else
+
+        // Update is called once per frame
+        private void Update()
         {
-            keyDown = false;
+            if (Input.GetAxis("Vertical") != 0)
+            {
+                if (!keyDown)
+                {
+                    if (Input.GetAxis("Vertical") < 0)
+                    {
+                        if (index < maxIndex)
+                            index++;
+                        else
+                            index = 0;
+                    }
+                    else if (Input.GetAxis("Vertical") > 0)
+                    {
+                        if (index > 0)
+                            index--;
+                        else
+                            index = maxIndex;
+                    }
+
+                    keyDown = true;
+                }
+            }
+            else
+            {
+                keyDown = false;
+            }
         }
     }
 }

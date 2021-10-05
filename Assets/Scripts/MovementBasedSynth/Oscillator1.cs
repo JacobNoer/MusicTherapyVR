@@ -1,68 +1,54 @@
-﻿using UnityEngine;
+﻿using System.Reflection;
+using UnityEngine;
 
 namespace MovementBasedSynth
 {
     public class Oscillator1 : MonoBehaviour
     {
         public double frequency = 440;
-        private double increment;
-        private double phase;
-        private double samplingFrequency = 48000.0;
-
         public float gain = 0.0f;
-
-        public Material trailMaterial;
-
-
-        private GameObject leftHand, rightHand;
-        private Transform leftHandPosition, rightHandPosition;
+        private double _increment;
+        private double _phase;
+        private double _samplingFrequency = 48000.0;
+        private GameObject _leftHand, _rightHand;
 
         private void Awake()
         {
-            leftHand = GameObject.Find("LeftHandAnchor");
-            rightHand = GameObject.Find("RightHandAnchor");
+            _leftHand = GameObject.Find("LeftHandAnchor");
+            _rightHand = GameObject.Find("RightHandAnchor");
         }
 
+        private void OnTriggerEnter(Collider other)
+        {
+            var trail = other.gameObject.GetComponent<TrailRenderer>();
+            trail.enabled = true;
+        }
 
-        /* private void OnTriggerStay(Collider other)
-         {
-             Vector3 closestToLeftHand = other.ClosestPoint(leftHandPosition.position);
-             if (Vector3.Distance(closestToLeftHand, leftHandPosition.position) < .01f)
-             {
-                 LeaveTrail(closestToLeftHand, .01f, trailMaterial);
-             }
+        private void OnTriggerStay(Collider other)
+        {
+            var trail = other.gameObject.GetComponent<TrailRenderer>();
+        }
 
-             Vector3 closestToRightHand = other.ClosestPoint(rightHandPosition.position);
-             if (Vector3.Distance(closestToLeftHand, rightHandPosition.position) < .01f)
-             {
-                 LeaveTrail(closestToLeftHand, .01f, trailMaterial);
-             }
-         }*/
+        private void OnTriggerExit(Collider other)
+        {
+            var trail = other.gameObject.GetComponent<TrailRenderer>();
+            trail.Clear();
+            trail.enabled = false; 
+        }
 
 
         private void OnAudioFilterRead(float[] data, int channels)
         {
-            increment = frequency * 2.0 * Mathf.PI / samplingFrequency;
+            _increment = frequency * 2.0 * Mathf.PI / _samplingFrequency;
 
             for (var i = 0; i < data.Length; i += channels)
             {
-                phase += increment;
-                data[i] = (float)(gain * Mathf.Sin((float)phase));
+                _phase += _increment;
+                data[i] = gain * Mathf.Sin((float)_phase);
 
                 if (channels == 2) data[i + 1] = data[i];
-                if (phase > Mathf.PI * 2) phase = 0.0;
+                if (_phase > Mathf.PI * 2) _phase = 0.0;
             }
-        }
-
-        private void LeaveTrail(Vector3 point, float scale, Material material)
-        {
-            var sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            sphere.transform.localScale = Vector3.one * scale;
-            sphere.transform.position = point;
-            sphere.transform.parent = transform.parent;
-            sphere.GetComponent<Collider>().enabled = false;
-            sphere.GetComponent<Renderer>().material = material;
-            Destroy(sphere, 2f);
         }
     }
 }
