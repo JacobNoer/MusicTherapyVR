@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4629147030149292}
   - component: {fileID: 114226563030493824}
-  - component: {fileID: 114202991084507870}
   m_Layer: 0
   m_Name: Realtime + Cube Player
   m_TagString: Untagged
@@ -48,15 +47,3 @@ MonoBehaviour:
   _normcoreAppSettings: {fileID: 0}
   _roomToJoinOnStart: Test Room
   _joinRoomOnStart: 1
---- !u!114 &114202991084507870
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1531957029821202}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d11d1e6dbd5afa940b6f8525d39eece5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

@@ -1,9 +1,13 @@
+using NormcoreIntegration;
 using UnityEngine;
 
 namespace Player
 {
     public class NonVRPlayerController : MonoBehaviour
     {
+        private const float StickToGroundForce = 10;
+        private const float TransitionSpeed = 20.0f;
+
         [Header("Movement")] [SerializeField] [Range(0.0f, 10.0f)]
         private float movementSpeed = 6.0f;
 
@@ -12,30 +16,42 @@ namespace Player
 
         [Header("Camera")] [SerializeField] [Range(0.0f, 1.0f)]
         private float mouseSensitivity = 0.2f;
+
         [SerializeField] private bool lockCursor = true;
 
         [Header("Head-bob")] [SerializeField] private bool headBobEnabled = true;
         [SerializeField] private float bobAmplitude = 0.07f;
         [SerializeField] private float bobFrequency = 12f;
+
         private float _cameraPitch;
         private CharacterController _characterController;
         private Vector3 _currentDirection = Vector3.zero;
         private bool _isJumping;
         private Camera _playerCamera;
         private Vector3 _restPosition;
-        private const float StickToGroundForce = 10;
-        private const float TransitionSpeed = 20.0f;
         private float _timer;
 
         private void Awake()
         {
             _characterController = GetComponent<CharacterController>();
-            _playerCamera = GetComponentInChildren<Camera>();
-            _restPosition = _playerCamera.transform.localPosition;
         }
 
         private void Start()
         {
+            _playerCamera = transform.GetChild(1).GetComponent<Camera>();
+            if (!InitializeNormcore.VREnabled)
+            {
+                _restPosition = _playerCamera.transform.localPosition;
+                GetComponent<OVRPlayerController>().enabled = false;
+                GetComponent<OVRSceneSampleController>().enabled = false;
+                GetComponent<OVRDebugInfo>().enabled = false;
+            }
+            else
+            {
+                _playerCamera.gameObject.SetActive(false);
+                enabled = false;
+            }
+
             if (lockCursor)
             {
                 Cursor.lockState = CursorLockMode.Locked;
